@@ -55,6 +55,9 @@ RUN apk update \
 # Install MySQL client
 RUN apk add --no-cache mysql-client
 
+# Install phpMyAdmin
+RUN apk add --no-cache phpmyadmin
+
 # Copy executable
 COPY --from=builder /app/go-chat-docker /usr/local/bin/go-chat-docker
 EXPOSE 8080
@@ -69,12 +72,20 @@ ENV MYSQL_USER=root
 ENV MYSQL_PASSWORD=root_password
 ENV MYSQL_DATABASE=my_database
 
-# Command to start MySQL in the background
-CMD ["sh", "-c", "mysqld --user=mysql --datadir=/var/lib/mysql --skip-networking &"]
+# Copy the startup script
+COPY startup.sh /usr/local/bin/startup.sh
+
+# Make the script executable
+RUN chmod +x /usr/local/bin/startup.sh
 
 # Expose MySQL port
 EXPOSE 3306
 
+# Expose phpMyAdmin port
+EXPOSE 8081
+
+# Run the startup script
+CMD ["/usr/local/bin/startup.sh"]
 
 # Copy executable
 COPY --from=builder /app/go-chat-docker /usr/local/bin/go-chat-docker
