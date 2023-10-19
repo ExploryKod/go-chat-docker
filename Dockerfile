@@ -58,7 +58,7 @@ RUN apk add --no-cache mysql-client
 # Install Adminer
 RUN mkdir /adminer \
     && ADMINER_URL=$(curl -s https://api.github.com/repos/vrana/adminer/releases/latest | grep "browser_download_url.*adminer.php" | cut -d : -f 2,3 | tr -d \" | tr -d ' ') \
-    && curl -L $ADMINER_URL -o /adminer/index.php
+    && curl -L "$ADMINER_URL" -o /adminer/index.php
 
 # Copy executable
 COPY --from=builder /app/go-chat-docker /usr/local/bin/go-chat-docker
