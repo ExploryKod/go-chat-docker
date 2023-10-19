@@ -1,5 +1,23 @@
 version: "3.8"
 services:
+  database:
+    image: mariadb
+    restart: always
+    networks:
+      - my_network
+    ports:
+        - "3307:3306"
+    volumes:
+        - ./migrations/01-create-table.up.sql:/docker-entrypoint-initdb.d/migration.sql
+    environment:
+        MARIADB_ROOT_PASSWORD: root
+        MARIADB_DATABASE: test
+    healthcheck:
+        test: [ "CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-proot" ]
+        interval: 5s
+        timeout: 5s
+        retries: 5
+
   my-service:
     container_name: my-service
     build:
@@ -12,6 +30,14 @@ services:
     ports:
     - 8181:8080
     - 2345:2345
+
+  adminer:
+    image: adminer
+    restart: always
+    networks:
+      - my_network
+    ports:
+        - "8080:8080"
 
 networks:
   my_network:
