@@ -55,11 +55,6 @@ RUN apk update \
 # Install MySQL client
 RUN apk add --no-cache mysql-client
 
-# Install Adminer
-RUN mkdir /adminer \
-    && ADMINER_URL=$(curl -s https://api.github.com/repos/vrana/adminer/releases/latest | grep "browser_download_url.*adminer.php" | cut -d : -f 2,3 | tr -d \" | tr -d ' ') \
-    && curl -L "$ADMINER_URL" -o /adminer/index.php
-
 # Copy executable
 COPY --from=builder /app/go-chat-docker /usr/local/bin/go-chat-docker
 EXPOSE 8080
@@ -73,9 +68,6 @@ ENV MYSQL_PORT=3306
 ENV MYSQL_USER=root
 ENV MYSQL_PASSWORD=root_password
 ENV MYSQL_DATABASE=my_database
-
-# Entrypoint for running MySQL and your application
-ENTRYPOINT ["/usr/local/bin/go-chat-docker"]
 
 # Command to start MySQL in the background
 CMD ["sh", "-c", "mysqld --user=mysql --datadir=/var/lib/mysql --skip-networking &"]
