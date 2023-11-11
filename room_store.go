@@ -5,10 +5,9 @@ import (
 )
 
 type RoomItem struct {
-	ID          int                `json:"id"`
-	Name        string             `json:"name"`
-	Description string             `json:"description"`
-	Clients     map[string]*Client `json:"-"`
+	ID          int    `json:"id"`
+	Name        string `json:"name"`
+	Description string `json:"description"`
 }
 
 func (t *UserStore) AddRoom(item RoomItem) (int, error) {
