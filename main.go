@@ -28,11 +28,21 @@ type UserItem struct {
 }
 
 type UserStoreInterface interface {
+	// Users
 	AddUser(item UserItem) (int, error)
 	GetUsers() ([]UserItem, error)
 	GetUserByUsername(username string) (UserItem, error)
 	DeleteUserById(id int) error
 	UpdateUser(item UserItem) error
+	// Rooms
+	AddRoom(item RoomItem) (int, error)
+	GetRoomByName(name string) (RoomItem, error)
+	GetRoomById(id int) (RoomItem, error)
+	DeleteRoomById(id int) error
+	AddUserToRoom(roomID int, userID int) error
+	GetUsersFromRoom(roomID int) ([]UserItem, error)
+	GetOneUserFromRoom(roomID int, userID int) (UserItem, error)
+	GetRooms() ([]RoomItem, error)
 }
 
 type Store struct {
