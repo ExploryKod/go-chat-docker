@@ -58,7 +58,7 @@ func main() {
 	// Replace these connection parameters with your actual PostgreSQL credentials
 	//connStr := "postgres://database_postgre_pn0t_user:0bITMm4I5lLLfFhfvCYkHQtJNcxzHYX3@dpg-ckor2m41tcps73e73qh0-a/database_postgre_pn0t?sslmode=disable"
 
-	connStr := mysql.Config{
+	connBDD := mysql.Config{
 		User:                 "u6ncknqjamhqpa3d",
 		Passwd:               "O1Bo5YwBLl31ua5agKoq",
 		Net:                  "tcp",
@@ -67,7 +67,7 @@ func main() {
 		AllowNativePasswords: true,
 	}
 
-	db, err := sql.Open("mysql", connStr.FormatDSN())
+	db, err := sql.Open("mysql", connBDD.FormatDSN())
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -78,7 +78,7 @@ func main() {
 		log.Fatal(err)
 	}
 
-	fmt.Println("Successfully connected to the PostgreSQL database!")
+	fmt.Println("Successfully connected to the MySQL database!")
 
 	store := CreateStore(db)
 
@@ -103,6 +103,7 @@ func main() {
 		w.Write([]byte("Hello My name is Golang"))
 	})
 	handler.Post("/auth/register", handler.RegisterHandler)
+	handler.Post("/auth/logged", handler.LoginHandler())
 
 	// Add a new user
 
