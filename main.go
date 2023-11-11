@@ -33,7 +33,7 @@ func main() {
 		AllowNativePasswords: true,
 	}
 
-	db, err := sql.Open("postgres", connStr.FormatDSN())
+	db, err := sql.Open("mysql", connStr.FormatDSN())
 	if err != nil {
 		log.Fatal(err)
 	}
