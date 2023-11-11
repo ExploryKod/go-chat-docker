@@ -7,6 +7,7 @@ import (
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
 	"github.com/go-chi/cors"
+	"github.com/go-chi/jwtauth/v5"
 	"github.com/go-sql-driver/mysql"
 	_ "github.com/lib/pq"
 	"log"
@@ -93,6 +94,16 @@ func main() {
 	})
 	handler.Post("/auth/register", handler.RegisterHandler)
 	handler.Post("/auth/logged", handler.LoginHandler())
+
+	handler.Group(func(r chi.Router) {
+		r.Use(jwtauth.Verifier(tokenAuth))
+
+		r.Use(jwtauth.Authenticator)
+		// use JoinHub method to join a hub ))
+		r.Get("/user-list", handler.GetUsers())
+		r.Delete("/delete-user/{id}", handler.DeleteUserHandler())
+		r.Get("/update-user", handler.UpdateHandler)
+	})
 
 	http.ListenAndServe(":2345", handler)
 }
