@@ -3,6 +3,7 @@ package main
 import (
 	"database/sql"
 	"fmt"
+	"github.com/go-sql-driver/mysql"
 	"log"
 	"net/http"
 
@@ -21,8 +22,18 @@ func main() {
 	})
 
 	// Replace these connection parameters with your actual PostgreSQL credentials
-	connStr := "postgres://database_postgre_pn0t_user:0bITMm4I5lLLfFhfvCYkHQtJNcxzHYX3@dpg-ckor2m41tcps73e73qh0-a/database_postgre_pn0t?sslmode=disable"
-	db, err := sql.Open("postgres", connStr)
+	//connStr := "postgres://database_postgre_pn0t_user:0bITMm4I5lLLfFhfvCYkHQtJNcxzHYX3@dpg-ckor2m41tcps73e73qh0-a/database_postgre_pn0t?sslmode=disable"
+
+	connStr := mysql.Config{
+		User:                 "u6ncknqjamhqpa3d",
+		Passwd:               "O1Bo5YwBLl31ua5agKoq",
+		Net:                  "tcp",
+		Addr:                 "bnouoawh6epgx2ipx4hl-mysql.services.clever-cloud.com:3306",
+		DBName:               "bnouoawh6epgx2ipx4hl",
+		AllowNativePasswords: true,
+	}
+
+	db, err := sql.Open("postgres", connStr.FormatDSN())
 	if err != nil {
 		log.Fatal(err)
 	}
