@@ -88,6 +88,10 @@ func main() {
 		store,
 	}
 
+	// Initiate Ws
+	wsServer := NewWebsocketServer()
+	go wsServer.Run()
+
 	handler.Use(middleware.Logger)
 	handler.Use(cors.Handler(cors.Options{
 		// AllowedOrigins:   []string{"https://foo.com"}, // Use this to allow specific origin hosts
@@ -118,6 +122,9 @@ func main() {
 		r.Get("/chat/rooms", handler.GetRooms())
 		r.Post("/chat/create", handler.CreateRoomHandler())
 		r.Delete("/delete-room/{id}", handler.DeleteRoomHandler())
+	})
+	handler.Get("/ws", func(w http.ResponseWriter, r *http.Request) {
+		serveWs(wsServer, w, r)
 	})
 
 	http.ListenAndServe(":2345", handler)
