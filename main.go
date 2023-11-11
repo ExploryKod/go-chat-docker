@@ -109,10 +109,15 @@ func main() {
 		r.Use(jwtauth.Verifier(tokenAuth))
 
 		r.Use(jwtauth.Authenticator)
-		// use JoinHub method to join a hub ))
+
 		r.Get("/user-list", handler.GetUsers())
 		r.Delete("/delete-user/{id}", handler.DeleteUserHandler())
 		r.Get("/update-user", handler.UpdateHandler)
+
+		r.Get("/chat/{id}", handler.JoinRoomHandler())
+		r.Get("/chat/rooms", handler.GetRooms())
+		r.Post("/chat/create", handler.CreateRoomHandler())
+		r.Delete("/delete-room/{id}", handler.DeleteRoomHandler())
 	})
 
 	http.ListenAndServe(":2345", handler)
