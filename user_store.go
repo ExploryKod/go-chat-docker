@@ -17,7 +17,7 @@ type UserStore struct {
 func (t *UserStore) GetUsers() ([]UserItem, error) {
 	var users []UserItem
 
-	rows, err := t.Query("SELECT id, username, password, admin FROM Users")
+	rows, err := t.Query("SELECT id, username, password, admin, email FROM Users")
 	if err != nil {
 		return []UserItem{}, err
 	}
@@ -57,7 +57,7 @@ func (t *UserStore) GetUserByUsername(username string) (UserItem, error) {
 }
 
 func (t *UserStore) AddUser(item UserItem) (int, error) {
-	res, err := t.DB.Exec("INSERT INTO Users (username, password) VALUES (?, ?)", item.Username, item.Password)
+	res, err := t.DB.Exec("INSERT INTO Users (username, password, email, admin) VALUES (?, ?, ?, ?)", item.Username, item.Password, item.Email, item.Admin)
 	if err != nil {
 		return 0, err
 	}

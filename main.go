@@ -20,11 +20,19 @@ func CreateStore(db *sql.DB) *Store {
 	}
 }
 
+//type UserItem struct {
+//	ID       int    `json:"id"`
+//	Username string `json:"username"`
+//	Password string `json:"password"`
+//	Admin    *int   `json:"admin"`
+//}
+
 type UserItem struct {
 	ID       int    `json:"id"`
 	Username string `json:"username"`
 	Password string `json:"password"`
-	Admin    *int   `json:"admin"`
+	Admin    int    `json:"admin"`
+	Email    string `json:"email"`
 }
 
 type UserStoreInterface interface {
