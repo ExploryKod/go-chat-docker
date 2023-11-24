@@ -4,13 +4,6 @@ import (
 	"database/sql"
 )
 
-type RoomItem struct {
-	ID          int                `json:"id"`
-	Name        string             `json:"name"`
-	Description string             `json:"description"`
-	Clients     map[string]*Client `json:"-"`
-}
-
 func (t *UserStore) AddRoom(item RoomItem) (int, error) {
 	res, err := t.DB.Exec("INSERT INTO Rooms (name, description) VALUES (?, ?)", item.Name, item.Description)
 	if err != nil {

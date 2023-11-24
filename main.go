@@ -20,41 +20,6 @@ func CreateStore(db *sql.DB) *Store {
 	}
 }
 
-//type UserItem struct {
-//	ID       int    `json:"id"`
-//	Username string `json:"username"`
-//	Password string `json:"password"`
-//	Admin    *int   `json:"admin"`
-//}
-
-type UserItem struct {
-	ID       int    `json:"id"`
-	Username string `json:"username"`
-	Password string `json:"password"`
-	Admin    int    `json:"admin"`
-	Email    string `json:"email"`
-}
-
-type UserStoreInterface interface {
-	// Users
-	AddUser(item UserItem) (int, error)
-	GetUsers() ([]UserItem, error)
-	GetUserByUsername(username string) (UserItem, error)
-	DeleteUserById(id int) error
-	UpdateUser(item UserItem) error
-	// Rooms
-	AddRoom(item RoomItem) (int, error)
-	GetRoomByName(name string) (RoomItem, error)
-	GetRoomById(id int) (RoomItem, error)
-	DeleteRoomById(id int) error
-	UpdateRoom(item RoomItem) error
-	GetRooms() ([]RoomItem, error)
-	// Rooms and users
-	AddUserToRoom(roomID int, userID int) error
-	GetUsersFromRoom(roomID int) ([]UserItem, error)
-	GetOneUserFromRoom(roomID int, userID int) (UserItem, error)
-}
-
 type Store struct {
 	UserStoreInterface
 }
@@ -133,6 +98,10 @@ func main() {
 		r.Post("/chat/create", handler.CreateRoomHandler())
 		r.Delete("/delete-room/{id}", handler.DeleteRoomHandler())
 		r.Post("/update-room", handler.UpdateRoomHandler())
+		r.Post("/send-message", handler.CreateMessageHandler)
+		r.Get("/chat/messages/{id}", handler.GetMessageHandler)
+		r.Get("/messages/room/delete-history/{id}", handler.DeleteMessageFromRoomHandler())
+		r.Get("/messages/user/delete-history/{id}", handler.DeleteMessageFromRoomHandler())
 		// Messages
 
 	})

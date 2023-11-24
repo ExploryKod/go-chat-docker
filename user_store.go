@@ -81,6 +81,17 @@ func (t *UserStore) UpdateUser(item UserItem) error {
 
 }
 
+func (t *UserStore) UpdateUserPassword(item UserItem) error {
+
+	_, err := t.DB.Exec("UPDATE Users SET password = ? WHERE id = ?", item.Password, item.ID)
+	if err != nil {
+		return err
+	}
+
+	return nil
+
+}
+
 func (t *UserStore) DeleteUserById(id int) error {
 	_, err := t.DB.Exec("DELETE FROM Users WHERE id = ?", id)
 	if err != nil {
