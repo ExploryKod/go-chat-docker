@@ -47,10 +47,12 @@ type UserStoreInterface interface {
 	GetRoomByName(name string) (RoomItem, error)
 	GetRoomById(id int) (RoomItem, error)
 	DeleteRoomById(id int) error
+	UpdateRoom(item RoomItem) error
+	GetRooms() ([]RoomItem, error)
+	// Rooms and users
 	AddUserToRoom(roomID int, userID int) error
 	GetUsersFromRoom(roomID int) ([]UserItem, error)
 	GetOneUserFromRoom(roomID int, userID int) (UserItem, error)
-	GetRooms() ([]RoomItem, error)
 }
 
 type Store struct {
@@ -121,15 +123,18 @@ func main() {
 		r.Use(jwtauth.Verifier(tokenAuth))
 
 		r.Use(jwtauth.Authenticator)
-
+		// Users
 		r.Get("/user-list", handler.GetUsers())
 		r.Delete("/delete-user/{id}", handler.DeleteUserHandler())
 		r.Get("/update-user", handler.UpdateHandler)
-
+		// Rooms
 		r.Get("/chat/{id}", handler.JoinRoomHandler())
 		r.Get("/chat/rooms", handler.GetRooms())
 		r.Post("/chat/create", handler.CreateRoomHandler())
 		r.Delete("/delete-room/{id}", handler.DeleteRoomHandler())
+		r.Post("/update-room", handler.UpdateRoomHandler())
+		// Messages
+
 	})
 	handler.Get("/ws", func(w http.ResponseWriter, r *http.Request) {
 		serveWs(wsServer, w, r)
