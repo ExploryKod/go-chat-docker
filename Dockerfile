@@ -30,11 +30,11 @@ FROM base AS builder
 WORKDIR /app
 
 # Application dependencies
-COPY . /app
+COPY ./gorillachat /app
 RUN go mod download \
     && go mod verify
 
-RUN go build -o go-chat-docker -a ./gorillachat/main.go
+RUN go build -o go-chat-docker -a .
 
 ### Production
 FROM alpine:latest
