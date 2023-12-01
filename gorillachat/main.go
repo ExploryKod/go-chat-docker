@@ -3,15 +3,16 @@ package main
 import (
 	"database/sql"
 	"flag"
+	"log"
+	"net/http"
+	"os"
+	"time"
+
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
 	"github.com/go-chi/cors"
 	"github.com/go-chi/jwtauth/v5"
 	"github.com/go-sql-driver/mysql"
-	"log"
-	"net/http"
-	"os"
-	"time"
 )
 
 type Handler struct {
@@ -28,21 +29,12 @@ func main() {
 
 	//psql 'postgresql://ExploryKod:0PqEazdVC2RJ@ep-square-block-44724621-pooler.eu-central-1.aws.neon.tech/chatdb?sslmode=require'
 
-	//conf := mysql.Config{
-	//	User:                 "u6ncknqjamhqpa3d",
-	//	Passwd:               "O1Bo5YwBLl31ua5agKoq",
-	//	Net:                  "tcp",
-	//	Addr:                 "bnouoawh6epgx2ipx4hl-mysql.services.clever-cloud.com:3306",
-	//	DBName:               "bnouoawh6epgx2ipx4hl",
-	//	AllowNativePasswords: true,
-	//}
-
 	conf := mysql.Config{
-		User:                 "root",
-		Passwd:               os.Getenv("MARIADB_ROOT_PASSWORD"),
+		User:                 "u6ncknqjamhqpa3d",
+		Passwd:               "O1Bo5YwBLl31ua5agKoq",
 		Net:                  "tcp",
-		Addr:                 "database:3306",
-		DBName:               os.Getenv("MARIADB_DATABASE"),
+		Addr:                 "bnouoawh6epgx2ipx4hl-mysql.services.clever-cloud.com:3306",
+		DBName:               "bnouoawh6epgx2ipx4hl",
 		AllowNativePasswords: true,
 	}
 
