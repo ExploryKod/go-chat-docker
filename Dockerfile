@@ -34,7 +34,7 @@ COPY . /app
 RUN go mod download \
     && go mod verify
 
-RUN go build -o go-chat-docker -a .
+RUN go build -o go-chat-docker -a ./gorillachat/main.go
 
 ### Production
 FROM alpine:latest
