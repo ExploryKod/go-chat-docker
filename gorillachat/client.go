@@ -6,6 +6,7 @@ package main
 
 import (
 	"encoding/json"
+	"fmt"
 	"github.com/google/uuid"
 	"log"
 	"net/http"
@@ -44,6 +45,7 @@ var upgrader = websocket.Upgrader{
 			"http://localhost:8003",
 			"http://localhost:8081"}
 		origin := r.Header.Get("Origin")
+		fmt.Println("Request Origin:", origin)
 		for _, allowedOrigin := range allowedOrigins {
 			if origin == allowedOrigin {
 				return true
