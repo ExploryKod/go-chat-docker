@@ -23,7 +23,8 @@ func (h *Handler) CreateMessageHandler(w http.ResponseWriter, r *http.Request) {
 		}
 		h.jsonResponse(w, http.StatusOK, map[string]interface{}{"message": "Message sent", "roomID": roomIDInt, "messageID": messageID, "userID": sender.ID})
 	} else {
-		println("Noooo")
+		println("No user with this id found")
+		h.jsonResponse(w, http.StatusOK, map[string]interface{}{"message": "Message not sent", "roomID": roomIDInt, "userID": sender.ID})
 		http.Error(w, "No user with this id found", http.StatusBadRequest)
 		return
 	}
