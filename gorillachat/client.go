@@ -47,9 +47,11 @@ var upgrader = websocket.Upgrader{
 		for _, allowedOrigin := range allowedOrigins {
 			if origin == allowedOrigin {
 				return true
+			} else {
+				return true
 			}
 		}
-		return false
+		return true
 	},
 }
 
