@@ -1,6 +1,7 @@
 package main
 
 func (t *UserStore) AddMessage(item MessageItem) (int, error) {
+
 	res, err := t.DB.Exec("INSERT INTO messages (content, user_id, room_id, username) VALUES (?, ?, ?, ?)", item.Content, item.UserID, item.RoomID, item.Username)
 	if err != nil {
 		return 0, err
@@ -12,6 +13,20 @@ func (t *UserStore) AddMessage(item MessageItem) (int, error) {
 	}
 
 	return int(id), nil
+}
+
+func (t *UserStore) CountMessagesSent() (int, error) {
+	rows, err := t.DB.Query("SELECT COUNT(*) FROM messages")
+	if err != nil {
+		return 0, err
+	}
+	defer rows.Close()
+
+	var count int
+	for rows.Next() {
+		rows.Scan(&count)
+	}
+	return count, nil
 }
 
 func (t *UserStore) GetMessagesFromRoom(id int) ([]MessageItem, error) {

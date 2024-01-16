@@ -6,7 +6,6 @@ package main
 
 import (
 	"encoding/json"
-	"fmt"
 	"github.com/google/uuid"
 	"log"
 	"net/http"
@@ -39,21 +38,14 @@ var upgrader = websocket.Upgrader{
 	WriteBufferSize: 1024,
 	CheckOrigin: func(r *http.Request) bool {
 		// Check if the origin is in the list of allowed origins
-		allowedOrigins := []string{
-			"https://chat-talks-client.vercel.app",
-			"http://localhost:8002",
-			"http://localhost:8003",
-			"http://localhost:8081"}
+		allowedOrigins := []string{"https://chat-talks-client.vercel.app", "http://localhost:8002", "http://localhost:8003"}
 		origin := r.Header.Get("Origin")
-		fmt.Println("Request Origin:", origin)
 		for _, allowedOrigin := range allowedOrigins {
 			if origin == allowedOrigin {
 				return true
-			} else {
-				return true
 			}
 		}
-		return true
+		return false
 	},
 }
 

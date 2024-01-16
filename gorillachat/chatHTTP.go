@@ -43,4 +43,5 @@ type UserStoreInterface interface {
 	AddMessage(item MessageItem) (int, error)
 	GetMessagesFromRoom(id int) ([]MessageItem, error)
 	DeleteMessagesByRoomId(id int) error
+	CountMessagesSent() (int, error)
 }

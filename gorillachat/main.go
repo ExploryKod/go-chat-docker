@@ -3,16 +3,16 @@ package main
 import (
 	"database/sql"
 	"flag"
-	"log"
-	"net/http"
-	"os"
-	"time"
-
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
 	"github.com/go-chi/cors"
 	"github.com/go-chi/jwtauth/v5"
 	"github.com/go-sql-driver/mysql"
+	"html/template"
+	"log"
+	"net/http"
+	"os"
+	"time"
 )
 
 type Handler struct {
@@ -29,12 +29,21 @@ func main() {
 
 	//psql 'postgresql://ExploryKod:0PqEazdVC2RJ@ep-square-block-44724621-pooler.eu-central-1.aws.neon.tech/chatdb?sslmode=require'
 
+	//conf := mysql.Config{
+	//	User:                 "u6ncknqjamhqpa3d",
+	//	Passwd:               "O1Bo5YwBLl31ua5agKoq",
+	//	Net:                  "tcp",
+	//	Addr:                 "bnouoawh6epgx2ipx4hl-mysql.services.clever-cloud.com:3306",
+	//	DBName:               "bnouoawh6epgx2ipx4hl",
+	//	AllowNativePasswords: true,
+	//}
+
 	conf := mysql.Config{
-		User:                 "u6ncknqjamhqpa3d",
-		Passwd:               "O1Bo5YwBLl31ua5agKoq",
+		User:                 "root",
+		Passwd:               os.Getenv("MARIADB_ROOT_PASSWORD"),
 		Net:                  "tcp",
-		Addr:                 "bnouoawh6epgx2ipx4hl-mysql.services.clever-cloud.com:3306",
-		DBName:               "bnouoawh6epgx2ipx4hl",
+		Addr:                 "database:3306",
+		DBName:               os.Getenv("MARIADB_DATABASE"),
 		AllowNativePasswords: true,
 	}
 
@@ -51,6 +60,32 @@ func main() {
 
 	store := CreateStore(db)
 	//mux := NewHandler(store)
+
+	type Todo struct {
+		Title string
+		Done  bool
+	}
+
+	type TodoPageData struct {
+		PageTitle string
+		Todos     []Todo
+	}
+
+	//http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+	//	data := TodoPageData{
+	//		PageTitle: "My TODO list",
+	//		Todos: []Todo{
+	//			{Title: "Task 1", Done: false},
+	//			{Title: "Task 2", Done: true},
+	//			{Title: "Task 3", Done: true},
+	//		},
+	//	}
+	//	err := tmpl.Execute(w, data)
+	//	if err != nil {
+	//		return
+	//	}
+	//})
+	//http.ListenAndServe(":80", nil)
 
 	handler := &Handler{
 		chi.NewRouter(),
@@ -98,6 +133,22 @@ func main() {
 
 	handler.Get("/ws", func(w http.ResponseWriter, r *http.Request) {
 		serveWs(wsServer, w, r)
+	})
+
+	tmpl := template.Must(template.ParseFiles("./layout.html"))
+	handler.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		data := TodoPageData{
+			PageTitle: "My TODO list",
+			Todos: []Todo{
+				{Title: "Task 1", Done: false},
+				{Title: "Task 2", Done: true},
+				{Title: "Task 3", Done: true},
+			},
+		}
+		err := tmpl.Execute(w, data)
+		if err != nil {
+			return
+		}
 	})
 
 	server := &http.Server{

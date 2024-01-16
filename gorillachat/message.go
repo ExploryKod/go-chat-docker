@@ -24,7 +24,7 @@ type Message struct {
 func (message *Message) encode() []byte {
 	json, err := json.Marshal(message)
 	if err != nil {
-		log.Println("error encoding message", err)
+		log.Println(err)
 	}
 
 	return json

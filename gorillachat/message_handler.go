@@ -9,29 +9,35 @@ import (
 func (h *Handler) CreateMessageHandler(w http.ResponseWriter, r *http.Request) {
 	username := r.FormValue("username")
 	content := r.FormValue("content")
+	//maxMessageTableRows := 2
 
 	sender, _ := h.Store.GetUserByUsername(username)
+	//messagesNumber, _ := h.Store.CountMessagesSent()
 
 	roomID := r.FormValue("roomID")
 	roomIDInt, _ := strconv.Atoi(roomID)
 
-	if sender.Username != "" {
-		messageID, err := h.Store.AddMessage(MessageItem{Content: content, UserID: sender.ID, RoomID: roomIDInt, Username: sender.Username})
-		if err != nil {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
-			return
-		}
+	if sender.Username != "" && content != "" && roomID != "" {
+		// TODO : add a limit of messages per room or accept all messages
+		//messageID, err := h.Store.AddMessage(MessageItem{Content: content, UserID: sender.ID, RoomID: roomIDInt, Username: sender.Username})
+		//if err != nil {
+		//	http.Error(w, err.Error(), http.StatusInternalServerError)
+		//	return
+		//}
+		messageID := 0
 		h.jsonResponse(w, http.StatusOK, map[string]interface{}{"message": "Message sent", "roomID": roomIDInt, "messageID": messageID, "userID": sender.ID})
-	} else {
-		println("No user with this id found")
-		h.jsonResponse(w, http.StatusOK, map[string]interface{}{"message": "Message not sent", "roomID": roomIDInt, "userID": sender.ID})
+	} else if sender.Username == "" {
 		http.Error(w, "No user with this id found", http.StatusBadRequest)
+		return
+	} else {
+		http.Error(w, "Requête non-satisfaite", http.StatusBadRequest)
 		return
 	}
 }
 
 func (h *Handler) GetMessageHandler(w http.ResponseWriter, r *http.Request) {
 	roomID := chi.URLParam(r, "id")
+
 	var id, err = strconv.Atoi(roomID)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
