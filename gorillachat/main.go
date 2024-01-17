@@ -60,16 +60,6 @@ func main() {
 	store := CreateStore(db)
 	//mux := NewHandler(store)
 
-	type Todo struct {
-		Title string
-		Done  bool
-	}
-
-	type TodoPageData struct {
-		PageTitle string
-		Todos     []Todo
-	}
-
 	handler := &Handler{
 		chi.NewRouter(),
 		store,
